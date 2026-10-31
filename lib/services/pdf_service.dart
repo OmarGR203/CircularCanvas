@@ -62,14 +62,65 @@ class PdfService {
           ),
           pw.Text('Nivel: ${resultado.nivelFactibilidad}'),
           pw.SizedBox(height: 10),
+          // FORTALEZAS
           pw.Header(level: 2, child: pw.Text('Fortalezas')),
-          ...resultado.fortalezas.map((x) => pw.Bullet(text: x)),
+          ...resultado.fortalezas.map(
+                (x) => pw.Bullet(text: x),
+          ),
+          if (resultado.observacionesFortalezas.isNotEmpty) ...[
+            pw.Text(
+              'Observaciones:',
+              style: pw.TextStyle(fontWeight: pw.FontWeight.bold),
+            ),
+            ...resultado.observacionesFortalezas.map(
+                  (x) => pw.Bullet(text: x),
+            ),
+          ],
+
+          // DEBILIDADES
           pw.Header(level: 2, child: pw.Text('Debilidades')),
-          ...resultado.debilidades.map((x) => pw.Bullet(text: x)),
+          ...resultado.debilidades.map(
+                (x) => pw.Bullet(text: x),
+          ),
+          if (resultado.observacionesDebilidades.isNotEmpty) ...[
+            pw.Text(
+              'Observaciones:',
+              style: pw.TextStyle(fontWeight: pw.FontWeight.bold),
+            ),
+            ...resultado.observacionesDebilidades.map(
+                  (x) => pw.Bullet(text: x),
+            ),
+          ],
+
+          // OPORTUNIDADES
           pw.Header(level: 2, child: pw.Text('Oportunidades')),
-          ...resultado.oportunidades.map((x) => pw.Bullet(text: x)),
+          ...resultado.oportunidades.map(
+                (x) => pw.Bullet(text: x),
+          ),
+          if (resultado.observacionesOportunidades.isNotEmpty) ...[
+            pw.Text(
+              'Observaciones:',
+              style: pw.TextStyle(fontWeight: pw.FontWeight.bold),
+            ),
+            ...resultado.observacionesOportunidades.map(
+                  (x) => pw.Bullet(text: x),
+            ),
+          ],
+
+          // AMENAZAS
           pw.Header(level: 2, child: pw.Text('Amenazas')),
-          ...resultado.amenazas.map((x) => pw.Bullet(text: x)),
+          ...resultado.amenazas.map(
+                (x) => pw.Bullet(text: x),
+          ),
+          if (resultado.observacionesAmenazas.isNotEmpty) ...[
+            pw.Text(
+              'Observaciones:',
+              style: pw.TextStyle(fontWeight: pw.FontWeight.bold),
+            ),
+            ...resultado.observacionesAmenazas.map(
+                  (x) => pw.Bullet(text: x),
+            ),
+          ],
         ],
       ),
     );

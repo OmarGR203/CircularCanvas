@@ -59,11 +59,28 @@ class _PantallaResultadosState extends State<PantallaResultados> {
 
   Future<void> _exportarPDF() async {
     try {
+      final resultadoConObservaciones = ResultadoFactibilidad(
+        indice: widget.resultado.indice,
+        fortalezas: widget.resultado.fortalezas,
+        debilidades: widget.resultado.debilidades,
+        oportunidades: widget.resultado.oportunidades,
+        amenazas: widget.resultado.amenazas,
+        puntajesPorBloque: widget.resultado.puntajesPorBloque,
+        observacionesFortalezas:
+        _convertirObservaciones(_fortalezasController.text),
+        observacionesDebilidades:
+        _convertirObservaciones(_debilidadesController.text),
+        observacionesOportunidades:
+        _convertirObservaciones(_oportunidadesController.text),
+        observacionesAmenazas:
+        _convertirObservaciones(_amenazasController.text),
+      );
+
       await PdfService.exportarAnalisis(
         nombreNegocio: widget.nombreNegocio,
         rol: widget.rol,
         bloques: widget.bloques,
-        resultado: widget.resultado,
+        resultado: resultadoConObservaciones,
       );
     } catch (e) {
       if (!mounted) return;
@@ -78,46 +95,57 @@ class _PantallaResultadosState extends State<PantallaResultados> {
 
   Future<void> _guardar() async {
     setState(() => _guardando = true);
+
     try {
       final id = await DBService.guardarSesion(
-        idExistente: widget.sesionId,
+        idExistente: _idGuardado ?? widget.sesionId,
         nombreNegocio: widget.nombreNegocio,
         rol: widget.rol,
         bloques: widget.bloques,
         items: widget.items,
         resultado: widget.resultado,
       );
+
+      await DBService.guardarObservacionesDafo(
+        id,
+        _obtenerObservaciones(),
+      );
+
+      if (!mounted) return;
+
       setState(() {
         _guardado = true;
         _idGuardado = id;
         _guardando = false;
       });
-      if (mounted) {
-        ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(
-            content: const Row(
-              children: [
-                Icon(Icons.check_circle, color: Colors.white, size: 18),
-                SizedBox(width: 8),
-                Text('Sesión guardada correctamente'),
-              ],
-            ),
-            backgroundColor: AppTema.menta,
-            behavior: SnackBarBehavior.floating,
-            shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
+
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: const Row(
+            children: [
+              Icon(Icons.check_circle, color: Colors.white, size: 18),
+              SizedBox(width: 8),
+              Text('Sesión guardada correctamente'),
+            ],
           ),
-        );
-      }
+          backgroundColor: AppTema.menta,
+          behavior: SnackBarBehavior.floating,
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(10),
+          ),
+        ),
+      );
     } catch (e) {
+      if (!mounted) return;
+
       setState(() => _guardando = false);
-      if (mounted) {
-        ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(
-            content: Text('Error al guardar: $e'),
-            backgroundColor: const Color(0xFFE24B4A),
-          ),
-        );
-      }
+
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Text('Error al guardar: $e'),
+          backgroundColor: const Color(0xFFE24B4A),
+        ),
+      );
     }
   }
 
@@ -373,6 +401,7 @@ class _PantallaResultadosState extends State<PantallaResultados> {
               mainAxisSpacing: 8,
               children: [
                 _CeldaDAFO(
+                  onChanged: _marcarCambios,
                   titulo: 'Fortalezas',
                   icono: Icons.trending_up,
                   color: AppTema.menta,
@@ -381,6 +410,7 @@ class _PantallaResultadosState extends State<PantallaResultados> {
                 ),
 
                 _CeldaDAFO(
+                  onChanged: _marcarCambios,
                   titulo: 'Debilidades',
                   icono: Icons.trending_down,
                   color: const Color(0xFFE24B4A),
@@ -389,6 +419,7 @@ class _PantallaResultadosState extends State<PantallaResultados> {
                 ),
 
                 _CeldaDAFO(
+                  onChanged: _marcarCambios,
                   titulo: 'Oportunidades',
                   icono: Icons.lightbulb_outline,
                   color: const Color(0xFF378ADD),
@@ -397,6 +428,7 @@ class _PantallaResultadosState extends State<PantallaResultados> {
                 ),
 
                 _CeldaDAFO(
+                  onChanged: _marcarCambios,
                   titulo: 'Amenazas',
                   icono: Icons.warning_amber_outlined,
                   color: AppTema.ambar,
@@ -499,6 +531,7 @@ class _CeldaDAFO extends StatelessWidget {
   final Color color;
   final List<String> items;
   final TextEditingController controller;
+  final VoidCallback onChanged;
 
   const _CeldaDAFO({
     required this.titulo,
@@ -506,6 +539,7 @@ class _CeldaDAFO extends StatelessWidget {
     required this.color,
     required this.items,
     required this.controller,
+    required this.onChanged,
   });
 
   @override
@@ -565,6 +599,7 @@ class _CeldaDAFO extends StatelessWidget {
 
           TextField(
             controller: controller,
+            onChanged: (_) => onChanged(),
             maxLines: 3,
             minLines: 2,
             decoration: InputDecoration(
