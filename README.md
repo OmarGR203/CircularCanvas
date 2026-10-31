@@ -402,18 +402,6 @@ Las funcionalidades implementadas incluyen:
 - [x] Gestión de archivos adjuntos.
 - [x] Exportación de reportes PDF.
 
----
-
-## 🔮 Posibles mejoras futuras
-
-Algunas líneas de evolución que podrían ampliar las capacidades del proyecto son:
-
-- Incorporar autenticación y administración de usuarios.
-- Implementar sincronización de información en la nube.
-- Integrar herramientas de análisis inteligente para apoyar la evaluación.
-- Incorporar comparativas entre diferentes versiones de un modelo de negocio.
-- Ampliar los indicadores de sostenibilidad e impacto ambiental.
-- Desarrollar paneles de seguimiento y visualización de indicadores.
 
 ---
 
@@ -421,18 +409,10 @@ Algunas líneas de evolución que podrían ampliar las capacidades del proyecto 
 
 **Omar Guzmán Rafael**
 
-Proyecto académico de desarrollo de software enfocado en la evaluación de modelos de negocio y economía circular.
+Proyecto académico enfocado en la evaluación de modelos de negocio y economía circular.
 
 - GitHub: [@OmarGR203](https://github.com/OmarGR203)
 - Repositorio: [CircularCanvas](https://github.com/OmarGR203/CircularCanvas)
-
----
-
-## 📄 Licencia
-
-Este proyecto no declara actualmente una licencia de distribución específica.
-
-Si deseas permitir que otras personas reutilicen, modifiquen o distribuyan el código, considera agregar un archivo `LICENSE` con la licencia que corresponda.
 
 ---
 
