@@ -51,7 +51,7 @@ class DBService {
     return sesiones;
   }
 
-  // Guarda las observaciones del análisis DAFO
+
   static Future<void> guardarObservacionesDafo(
       String id,
       Map<String, List<String>> observaciones,
@@ -61,7 +61,7 @@ class DBService {
     await box.put(id, observaciones);
   }
 
-  // Recupera las observaciones de una sesión
+
   static Map<String, List<String>> obtenerObservacionesDafo(
       String id,
       ) {
@@ -86,7 +86,7 @@ class DBService {
     };
   }
 
-  // Elimina las observaciones cuando se elimina una sesión
+
   static Future<void> eliminarObservacionesDafo(String id) async {
     final box = Hive.box<dynamic>('analisis_dafo');
 

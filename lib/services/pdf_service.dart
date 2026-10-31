@@ -62,7 +62,7 @@ class PdfService {
           ),
           pw.Text('Nivel: ${resultado.nivelFactibilidad}'),
           pw.SizedBox(height: 10),
-          // FORTALEZAS
+
           pw.Header(level: 2, child: pw.Text('Fortalezas')),
           ...resultado.fortalezas.map(
                 (x) => pw.Bullet(text: x),
@@ -77,7 +77,7 @@ class PdfService {
             ),
           ],
 
-          // DEBILIDADES
+
           pw.Header(level: 2, child: pw.Text('Debilidades')),
           ...resultado.debilidades.map(
                 (x) => pw.Bullet(text: x),
@@ -92,7 +92,7 @@ class PdfService {
             ),
           ],
 
-          // OPORTUNIDADES
+
           pw.Header(level: 2, child: pw.Text('Oportunidades')),
           ...resultado.oportunidades.map(
                 (x) => pw.Bullet(text: x),
@@ -107,7 +107,7 @@ class PdfService {
             ),
           ],
 
-          // AMENAZAS
+
           pw.Header(level: 2, child: pw.Text('Amenazas')),
           ...resultado.amenazas.map(
                 (x) => pw.Bullet(text: x),

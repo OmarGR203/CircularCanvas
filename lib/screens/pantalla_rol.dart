@@ -59,7 +59,7 @@ class _PantallaRolState extends State<PantallaRol> {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              // Header
+
               Center(
                 child: Image.asset(
                   'assets/images/logo_circular_canvas.jpg',
@@ -91,7 +91,7 @@ class _PantallaRolState extends State<PantallaRol> {
                       ],
                     ),
                   ),
-                  // Botón historial
+
                   if (totalSesiones > 0)
                     Stack(
                       children: [
