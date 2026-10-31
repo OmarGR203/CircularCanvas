@@ -86,11 +86,19 @@ class ItemEvaluacion {
 
 class ResultadoFactibilidad {
   final double indice;
+
   final List<String> fortalezas;
   final List<String> debilidades;
   final List<String> oportunidades;
   final List<String> amenazas;
+
   final Map<String, double> puntajesPorBloque;
+
+
+  final List<String> observacionesFortalezas;
+  final List<String> observacionesDebilidades;
+  final List<String> observacionesOportunidades;
+  final List<String> observacionesAmenazas;
 
   ResultadoFactibilidad({
     required this.indice,
@@ -99,6 +107,10 @@ class ResultadoFactibilidad {
     required this.oportunidades,
     required this.amenazas,
     required this.puntajesPorBloque,
+    this.observacionesFortalezas = const [],
+    this.observacionesDebilidades = const [],
+    this.observacionesOportunidades = const [],
+    this.observacionesAmenazas = const [],
   });
 
   String get nivelFactibilidad {

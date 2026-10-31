@@ -24,17 +24,26 @@ class PantallaResultados extends StatefulWidget {
     required this.items,
   });
 
-  //String? get sesionId => null;
 
   @override
   State<PantallaResultados> createState() => _PantallaResultadosState();
 }
 
 class _PantallaResultadosState extends State<PantallaResultados> {
-  //this.sesionId;
   bool _guardando = false;
   bool _guardado = false;
   String? _idGuardado;
+  final TextEditingController _fortalezasController =
+  TextEditingController();
+
+  final TextEditingController _debilidadesController =
+  TextEditingController();
+
+  final TextEditingController _oportunidadesController =
+  TextEditingController();
+
+  final TextEditingController _amenazasController =
+  TextEditingController();
 
   Color get _colorIndice {
     if (widget.resultado.indice >= 70) return AppTema.menta;
@@ -110,6 +119,15 @@ class _PantallaResultadosState extends State<PantallaResultados> {
         );
       }
     }
+  }
+
+  @override
+  void dispose() {
+    _fortalezasController.dispose();
+    _debilidadesController.dispose();
+    _oportunidadesController.dispose();
+    _amenazasController.dispose();
+    super.dispose();
   }
 
   @override
@@ -307,25 +325,36 @@ class _PantallaResultadosState extends State<PantallaResultados> {
               mainAxisSpacing: 8,
               children: [
                 _CeldaDAFO(
-                    titulo: 'Fortalezas',
-                    icono: Icons.trending_up,
-                    color: AppTema.menta,
-                    items: widget.resultado.fortalezas),
+                  titulo: 'Fortalezas',
+                  icono: Icons.trending_up,
+                  color: AppTema.menta,
+                  items: widget.resultado.fortalezas,
+                  controller: _fortalezasController,
+                ),
+
                 _CeldaDAFO(
-                    titulo: 'Debilidades',
-                    icono: Icons.trending_down,
-                    color: const Color(0xFFE24B4A),
-                    items: widget.resultado.debilidades),
+                  titulo: 'Debilidades',
+                  icono: Icons.trending_down,
+                  color: const Color(0xFFE24B4A),
+                  items: widget.resultado.debilidades,
+                  controller: _debilidadesController,
+                ),
+
                 _CeldaDAFO(
-                    titulo: 'Oportunidades',
-                    icono: Icons.lightbulb_outline,
-                    color: const Color(0xFF378ADD),
-                    items: widget.resultado.oportunidades),
+                  titulo: 'Oportunidades',
+                  icono: Icons.lightbulb_outline,
+                  color: const Color(0xFF378ADD),
+                  items: widget.resultado.oportunidades,
+                  controller: _oportunidadesController,
+                ),
+
                 _CeldaDAFO(
-                    titulo: 'Amenazas',
-                    icono: Icons.warning_amber_outlined,
-                    color: AppTema.ambar,
-                    items: widget.resultado.amenazas),
+                  titulo: 'Amenazas',
+                  icono: Icons.warning_amber_outlined,
+                  color: AppTema.ambar,
+                  items: widget.resultado.amenazas,
+                  controller: _amenazasController,
+                ),
               ],
             ),
 
@@ -350,12 +379,15 @@ class _CeldaDAFO extends StatelessWidget {
   final IconData icono;
   final Color color;
   final List<String> items;
+  final TextEditingController controller;
 
-  const _CeldaDAFO(
-      {required this.titulo,
-      required this.icono,
-      required this.color,
-      required this.items});
+  const _CeldaDAFO({
+    required this.titulo,
+    required this.icono,
+    required this.color,
+    required this.items,
+    required this.controller,
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -373,36 +405,63 @@ class _CeldaDAFO extends StatelessWidget {
             children: [
               Icon(icono, size: 16, color: color),
               const SizedBox(width: 6),
-              Text(titulo,
+              Expanded(
+                child: Text(
+                  titulo,
                   style: TextStyle(
-                      fontSize: 13, fontWeight: FontWeight.w600, color: color)),
+                    fontSize: 13,
+                    fontWeight: FontWeight.w600,
+                    color: color,
+                  ),
+                ),
+              ),
             ],
           ),
-          const SizedBox(height: 8),
-          Expanded(
-            child: SingleChildScrollView(
-              child: Column(
+
+          const SizedBox(height: 10),
+
+          ...items.map(
+                (item) => Padding(
+              padding: const EdgeInsets.only(bottom: 6),
+              child: Row(
                 crossAxisAlignment: CrossAxisAlignment.start,
-                children: items
-                    .take(3)
-                    .map((item) => Padding(
-                          padding: const EdgeInsets.only(bottom: 4),
-                          child: Row(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              Text('• ',
-                                  style: TextStyle(fontSize: 11, color: color)),
-                              Expanded(
-                                child: Text(item,
-                                    style: TextStyle(
-                                        fontSize: 11,
-                                        color: AppTema.textoMedio,
-                                        height: 1.3)),
-                              ),
-                            ],
-                          ),
-                        ))
-                    .toList(),
+                children: [
+                  Text('• ', style: TextStyle(color: color)),
+                  Expanded(
+                    child: Text(
+                      item,
+                      style: TextStyle(
+                        fontSize: 11,
+                        color: AppTema.textoMedio,
+                        height: 1.3,
+                      ),
+                    ),
+                  ),
+                ],
+              ),
+            ),
+          ),
+
+          const SizedBox(height: 8),
+
+          TextField(
+            controller: controller,
+            maxLines: 3,
+            minLines: 2,
+            decoration: InputDecoration(
+              hintText: 'Agrega tus observaciones...',
+              hintStyle: const TextStyle(fontSize: 11),
+              filled: true,
+              fillColor: Colors.white,
+              contentPadding: const EdgeInsets.all(9),
+              border: OutlineInputBorder(
+                borderRadius: BorderRadius.circular(8),
+              ),
+              enabledBorder: OutlineInputBorder(
+                borderRadius: BorderRadius.circular(8),
+                borderSide: BorderSide(
+                  color: color.withOpacity(0.25),
+                ),
               ),
             ),
           ),
