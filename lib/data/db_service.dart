@@ -33,13 +33,12 @@ class DBService {
       id: id,
       nombreNegocio: nombreNegocio,
       rolNombre: rol.nombre,
-      rolIcono: rol.icono,
       fecha: DateTime.now(),
       contenidoBloques: contenidoBloques,
       puntuaciones: puntuaciones,
       importancias: importancias,
       indiceFactibilidad: resultado.indice,
-      nivelFactibilidad: resultado.nivelFactibilidad,
+      nivelFactibilidad: resultado.nivelFactibilidad, rolIcono: '',
     );
 
     await _box.put(id, sesion);

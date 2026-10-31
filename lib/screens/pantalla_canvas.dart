@@ -120,7 +120,7 @@ class _PantallaCanvasState extends State<PantallaCanvas> {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Text(widget.nombreNegocio),
-            Text('${widget.rol.icono} ${widget.rol.nombre}',
+            Text('${widget.rol.nombre}',
                 style: const TextStyle(fontSize: 12, fontWeight: FontWeight.w400)),
           ],
         ),

@@ -262,7 +262,7 @@ class _PantallaResultadosState extends State<PantallaResultados> {
                 padding: const EdgeInsets.all(16),
                 child: Row(
                   children: [
-                    Text(widget.rol.icono, style: const TextStyle(fontSize: 32)),
+                    Text(widget.rol.nombre, style: const TextStyle(fontSize: 32)),
                     const SizedBox(width: 12),
                     Expanded(
                       child: Column(

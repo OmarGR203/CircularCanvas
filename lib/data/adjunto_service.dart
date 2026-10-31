@@ -11,7 +11,6 @@ class AdjuntoService {
 
   static const int maxBytes = 10 * 1024 * 1024;
 
-  // Seleccionar archivos y guardarlos en Hive.
   static Future<int> adjuntar(String sesionId) async {
     final seleccion = await FilePicker.platform.pickFiles(
       allowMultiple: true,
@@ -61,7 +60,7 @@ class AdjuntoService {
     return guardados;
   }
 
-  // Obtener los archivos asociados a una evaluación.
+
   static Future<List<Map>> obtenerPorSesion(String sesionId) async {
     final archivos = _box.values
         .whereType<Map>()
@@ -78,12 +77,11 @@ class AdjuntoService {
     return archivos;
   }
 
-  // Eliminar un archivo.
+
   static Future<void> eliminar(String id) async {
     await _box.delete(id);
   }
 
-  // Eliminar todos los archivos de una evaluación.
   static Future<void> eliminarPorSesion(String sesionId) async {
     final ids = _box.values
         .whereType<Map>()
@@ -94,7 +92,6 @@ class AdjuntoService {
     await _box.deleteAll(ids);
   }
 
-  // Descargar un archivo en el navegador.
   static void descargar(Map archivo) {
     final bytes = archivo['bytes'] as Uint8List;
 
@@ -125,7 +122,6 @@ class AdjuntoService {
     html.Url.revokeObjectUrl(url);
   }
 
-  // Convertir el tamaño a una unidad legible.
   static String tamanoLegible(int bytes) {
     if (bytes < 1024) return '$bytes B';
 

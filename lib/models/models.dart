@@ -33,17 +33,6 @@ extension RolEmprendedorExt on RolEmprendedor {
     }
   }
 
-  String get icono {
-    switch (this) {
-      case RolEmprendedor.directorEjecutivo: return '🏢';
-      case RolEmprendedor.intrapreneur: return '💡';
-      case RolEmprendedor.emprendedor: return '🚀';
-      case RolEmprendedor.inversor: return '💰';
-      case RolEmprendedor.consultor: return '🧩';
-      case RolEmprendedor.disenador: return '🎨';
-      case RolEmprendedor.emprendedorConcienciado: return '🌱';
-    }
-  }
 }
 
 class BloqueCanvas {
