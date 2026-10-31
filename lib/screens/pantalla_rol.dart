@@ -217,6 +217,27 @@ class _TarjetaRol extends StatelessWidget {
 
   const _TarjetaRol({required this.rol, required this.seleccionado, required this.onTap});
 
+  String _obtenerRutaImagen() {
+    switch (rol.nombre.toLowerCase()) {
+      case 'emprendedor':
+        return 'assets/images/emprendedor.jpg';
+      case 'intraemprendedor':
+        return 'assets/images/intraemprendedor.jpg';
+      case 'consultor':
+        return 'assets/images/consultor.jpg';
+      case 'diseñador':
+        return 'assets/images/disenador.jpg';
+      case 'inversor':
+        return 'assets/images/inversor.jpg';
+      case 'senior':
+        return 'assets/images/senior.jpg';
+      case 'concienzudo':
+        return 'assets/images/concienzudo.jpg';
+      default:
+        return '';
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
@@ -235,7 +256,27 @@ class _TarjetaRol extends StatelessWidget {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            Text(rol.icono, style: const TextStyle(fontSize: 26)),
+            ClipRRect(
+              borderRadius: BorderRadius.circular(10),
+              child: Image.asset(
+                _obtenerRutaImagen(),
+                width: 76,
+                height: 76,
+                fit: BoxFit.cover,
+                errorBuilder: (context, error, stackTrace) {
+                  return Container(
+                    width: 76,
+                    height: 76,
+                    color: AppTema.mentaClaro,
+                    child: Icon(
+                      Icons.person,
+                      size: 38,
+                      color: AppTema.verde,
+                    ),
+                  );
+                },
+              ),
+            ),
             const SizedBox(height: 6),
             Text(
               rol.nombre,
