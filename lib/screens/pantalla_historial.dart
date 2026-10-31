@@ -4,6 +4,8 @@ import '../data/db_service.dart';
 import '../main.dart';
 import '../data/adjunto_service.dart';
 import 'package:hive_flutter/hive_flutter.dart';
+import '../models/models.dart';
+import 'pantalla_canvas.dart';
 
 class PantallaHistorial extends StatefulWidget {
   const PantallaHistorial({super.key});
@@ -162,6 +164,32 @@ class _PantallaHistorialState extends State<PantallaHistorial> {
     );
   }
 
+
+  void _editar(SesionHive sesion) {
+    final roles = RolEmprendedor.values.where(
+          (r) => r.nombre == sesion.rolNombre,
+    );
+
+    if (roles.isEmpty) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(
+          content: Text('No se pudo identificar el rol de esta sesión.'),
+        ),
+      );
+      return;
+    }
+
+    Navigator.push(
+      context,
+      MaterialPageRoute(
+        builder: (_) => PantallaCanvas(
+          sesionExistente: sesion,
+          rol: roles.first,
+          nombreNegocio: sesion.nombreNegocio,
+        ),
+      ),
+    );
+  }
   @override
   void initState() {
     super.initState();
@@ -381,6 +409,16 @@ class _PantallaHistorialState extends State<PantallaHistorial> {
                                     color: Colors.blueGrey,
                                   ),
                                   onPressed: () => _gestionarAdjuntos(sesion),
+                                ),
+                                IconButton(
+                                  tooltip: 'Editar evaluación',
+                                  visualDensity: VisualDensity.compact,
+                                  icon: const Icon(
+                                    Icons.edit_outlined,
+                                    size: 19,
+                                    color: Colors.blue,
+                                  ),
+                                  onPressed: () => _editar(sesion),
                                 ),
                                 GestureDetector(
                                   onTap: () => _eliminar(sesion),

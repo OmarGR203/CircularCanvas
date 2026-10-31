@@ -174,6 +174,7 @@ class _PantallaCanvasState extends State<PantallaCanvas> {
                       bloques: _bloques,
                       rol: widget.rol,
                       nombreNegocio: widget.nombreNegocio,
+                      sesionExistente: widget.sesionExistente,
                     ),
                   ),
                 ),

@@ -62,7 +62,7 @@ class _PantallaRolState extends State<PantallaRol> {
               // Header
               Center(
                 child: Image.asset(
-                  'assets/images/logo_circular_canvas.png',
+                  'assets/images/logo_circular_canvas.jpeg',
                   width: 150,
                   height: 150,
                   fit: BoxFit.contain,

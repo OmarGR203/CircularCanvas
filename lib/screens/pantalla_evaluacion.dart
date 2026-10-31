@@ -149,6 +149,7 @@ class _PantallaEvaluacionState extends State<PantallaEvaluacion> {
                       rol: widget.rol,
                       bloques: widget.bloques,
                       items: _items,
+                      sesionId: widget.sesionExistente?.id,
                     ),
                   ),
                 ),
