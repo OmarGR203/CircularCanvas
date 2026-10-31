@@ -121,6 +121,54 @@ class _PantallaResultadosState extends State<PantallaResultados> {
     }
   }
 
+  List<String> _convertirObservaciones(String texto) {
+    return texto
+        .split('\n')
+        .map((e) => e.trim())
+        .where((e) => e.isNotEmpty)
+        .toList();
+  }
+
+  Map<String, List<String>> _obtenerObservaciones() {
+    return {
+      'fortalezas': _convertirObservaciones(_fortalezasController.text),
+      'debilidades': _convertirObservaciones(_debilidadesController.text),
+      'oportunidades': _convertirObservaciones(_oportunidadesController.text),
+      'amenazas': _convertirObservaciones(_amenazasController.text),
+    };
+  }
+
+  void _cargarObservaciones() {
+    if (widget.sesionId == null) return;
+
+    final observaciones =
+    DBService.obtenerObservacionesDafo(widget.sesionId!);
+
+    _fortalezasController.text =
+        observaciones['fortalezas']!.join('\n');
+    _debilidadesController.text =
+        observaciones['debilidades']!.join('\n');
+    _oportunidadesController.text =
+        observaciones['oportunidades']!.join('\n');
+    _amenazasController.text =
+        observaciones['amenazas']!.join('\n');
+
+    _idGuardado = widget.sesionId;
+    _guardado = true;
+  }
+
+  void _marcarCambios() {
+    if (_guardado) {
+      setState(() => _guardado = false);
+    }
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    _cargarObservaciones();
+  }
+
   @override
   void dispose() {
     _fortalezasController.dispose();
@@ -359,6 +407,77 @@ class _PantallaResultadosState extends State<PantallaResultados> {
             ),
 
             const SizedBox(height: 24),
+
+            Text(
+              'Información del Modelo Canvas',
+              style: Theme.of(context).textTheme.titleMedium,
+            ),
+
+            const SizedBox(height: 6),
+
+            Text(
+              'Consulta la información que registraste en el Canvas para fundamentar tus observaciones del análisis DAFO.',
+              style: Theme.of(context).textTheme.bodySmall,
+            ),
+
+            const SizedBox(height: 12),
+
+            ...widget.bloques
+                .where((bloque) => bloque.estaLleno)
+                .map(
+                  (bloque) => Card(
+                margin: const EdgeInsets.only(bottom: 8),
+                child: Padding(
+                  padding: const EdgeInsets.all(12),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Row(
+                        children: [
+                          Expanded(
+                            child: Text(
+                              '${bloque.numero}. ${bloque.titulo}',
+                              style: const TextStyle(
+                                fontWeight: FontWeight.w600,
+                                fontSize: 13,
+                              ),
+                            ),
+                          ),
+                          if (bloque.esCircular)
+                            const Icon(
+                              Icons.recycling,
+                              size: 17,
+                              color: AppTema.circular,
+                            ),
+                        ],
+                      ),
+                      const SizedBox(height: 6),
+                      Text(
+                        bloque.contenido,
+                        style: TextStyle(
+                          fontSize: 12,
+                          color: AppTema.textoMedio,
+                          height: 1.4,
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+              ),
+            ),
+
+            if (widget.bloques.every((bloque) => !bloque.estaLleno))
+              const Card(
+                child: Padding(
+                  padding: EdgeInsets.all(12),
+                  child: Text(
+                    'No hay información registrada en los bloques del Canvas.',
+                  ),
+                ),
+              ),
+
+            const SizedBox(height: 24),
+
             Center(
               child: Text(
                 'CBMC (Lewandowski, 2015) + DAFO (Osterwalder & Pigneur, 2010 pp. 216–219)',

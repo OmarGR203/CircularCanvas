@@ -10,6 +10,7 @@ void main() async {
   Hive.registerAdapter(SesionHiveAdapter());
   await Hive.openBox<SesionHive>('sesiones');
   await Hive.openBox<dynamic>('adjuntos');
+  await Hive.openBox<dynamic>('analisis_dafo');
   runApp(const CircularCanvasApp());
 }
 
