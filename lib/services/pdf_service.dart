@@ -16,7 +16,7 @@ class PdfService {
     final documento = pw.Document();
 
     final logoData = await rootBundle.load(
-      'assets/images/logo_circular_canvas.jpeg',
+      'assets/images/logo_circular_canvas.jpg',
     );
     final logo = pw.MemoryImage(
       logoData.buffer.asUint8List(),

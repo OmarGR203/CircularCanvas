@@ -32,4 +32,4 @@ flutter:
   uses-material-design: true
 
   assets:
-    - assets/images/logo_circular_canvas.jpeg
+    - assets/images/logo_circular_canvas.jpg
