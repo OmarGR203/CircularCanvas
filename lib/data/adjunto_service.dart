@@ -1,7 +1,5 @@
 
 import 'dart:typed_data';
-import 'dart:html' as html;
-
 import 'package:file_picker/file_picker.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 import 'package:uuid/uuid.dart';
@@ -92,7 +90,7 @@ class AdjuntoService {
     await _box.deleteAll(ids);
   }
 
-  static void descargar(Map archivo) {
+  static Future<void> descargar(Map archivo) async {
     final bytes = archivo['bytes'] as Uint8List;
 
     final nombre = archivo['nombre']
@@ -111,15 +109,10 @@ class AdjuntoService {
       _ => 'application/octet-stream',
     };
 
-    final blob = html.Blob([bytes], mime);
-    final url = html.Url.createObjectUrlFromBlob(blob);
-
-    final enlace = html.AnchorElement(href: url)
-      ..download = nombre;
-
-    enlace.click();
-
-    html.Url.revokeObjectUrl(url);
+    await FilePicker.platform.saveFile(
+      fileName: nombre,
+      bytes: bytes,
+    );
   }
 
   static String tamanoLegible(int bytes) {
