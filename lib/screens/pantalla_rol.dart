@@ -218,26 +218,25 @@ class _TarjetaRol extends StatelessWidget {
   const _TarjetaRol({required this.rol, required this.seleccionado, required this.onTap});
 
   String _obtenerRutaImagen() {
-    switch (rol.nombre.toLowerCase()) {
-      case 'emprendedor':
-        return 'assets/images/emprendedor.jpg';
-      case 'intraemprendedor':
-        return 'assets/images/intraemprendedor.jpg';
-      case 'consultor':
-        return 'assets/images/consultor.jpg';
-      case 'diseñador':
-        return 'assets/images/disenador.jpg';
-      case 'inversor':
-        return 'assets/images/inversor.jpg';
-      case 'senior':
+    // Se relaciona cada valor del enum con el nombre real de su imagen en assets.
+    // Los nombres visibles del rol no tienen que coincidir con los nombres de archivo.
+    switch (rol) {
+      case RolEmprendedor.directorEjecutivo:
         return 'assets/images/senior.jpg';
-      case 'concienzudo':
+      case RolEmprendedor.intrapreneur:
+        return 'assets/images/intraemprendedor.jpg';
+      case RolEmprendedor.emprendedor:
+        return 'assets/images/emprendedor.jpg';
+      case RolEmprendedor.inversor:
+        return 'assets/images/inversor.jpg';
+      case RolEmprendedor.consultor:
+        return 'assets/images/consultor.jpg';
+      case RolEmprendedor.disenador:
+        return 'assets/images/disenador.jpg';
+      case RolEmprendedor.emprendedorConcienciado:
         return 'assets/images/concienzudo.jpg';
-      default:
-        return '';
     }
   }
-
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
