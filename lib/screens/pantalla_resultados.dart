@@ -32,6 +32,7 @@ class PantallaResultados extends StatefulWidget {
 class _PantallaResultadosState extends State<PantallaResultados> {
   bool _guardando = false;
   bool _guardado = false;
+  bool _exportando = false;
   String? _idGuardado;
   final TextEditingController _fortalezasController =
   TextEditingController();
@@ -58,6 +59,9 @@ class _PantallaResultadosState extends State<PantallaResultados> {
   }
 
   Future<void> _exportarPDF() async {
+    if (_exportando) return;
+    setState(() => _exportando = true);
+
     try {
       final resultadoConObservaciones = ResultadoFactibilidad(
         indice: widget.resultado.indice,
@@ -67,29 +71,43 @@ class _PantallaResultadosState extends State<PantallaResultados> {
         amenazas: widget.resultado.amenazas,
         puntajesPorBloque: widget.resultado.puntajesPorBloque,
         observacionesFortalezas:
-        _convertirObservaciones(_fortalezasController.text),
+            _convertirObservaciones(_fortalezasController.text),
         observacionesDebilidades:
-        _convertirObservaciones(_debilidadesController.text),
+            _convertirObservaciones(_debilidadesController.text),
         observacionesOportunidades:
-        _convertirObservaciones(_oportunidadesController.text),
+            _convertirObservaciones(_oportunidadesController.text),
         observacionesAmenazas:
-        _convertirObservaciones(_amenazasController.text),
+            _convertirObservaciones(_amenazasController.text),
       );
 
-      await PdfService.exportarAnalisis(
+      final guardado = await PdfService.exportarAnalisis(
         nombreNegocio: widget.nombreNegocio,
         rol: widget.rol,
         bloques: widget.bloques,
         resultado: resultadoConObservaciones,
       );
+
+      if (!mounted) return;
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Text(
+            guardado
+                ? 'PDF guardado correctamente.'
+                : 'Exportación cancelada. No se guardó ningún archivo.',
+          ),
+          backgroundColor: guardado ? AppTema.verde : AppTema.textoMedio,
+        ),
+      );
     } catch (e) {
       if (!mounted) return;
-
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(
           content: Text('No se pudo generar el PDF: $e'),
+          backgroundColor: const Color(0xFFE24B4A),
         ),
       );
+    } finally {
+      if (mounted) setState(() => _exportando = false);
     }
   }
 
@@ -216,8 +234,10 @@ class _PantallaResultadosState extends State<PantallaResultados> {
         actions: [
           IconButton(
             tooltip: 'Exportar a PDF',
-            icon: const Icon(Icons.picture_as_pdf_outlined),
-            onPressed: _exportarPDF,
+            icon: _exportando
+                ? const SizedBox(width: 18, height: 18, child: CircularProgressIndicator(strokeWidth: 2))
+                : const Icon(Icons.picture_as_pdf_outlined),
+            onPressed: _exportando ? null : _exportarPDF,
           ),
           Padding(
             padding: const EdgeInsets.only(right: 12),
