@@ -55,7 +55,7 @@ class _PantallaRolState extends State<PantallaRol> {
     return Scaffold(
       body: SafeArea(
         child: SingleChildScrollView(
-          padding: const EdgeInsets.all(24),
+          padding: const EdgeInsets.fromLTRB(20, 18, 20, 28),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
@@ -63,12 +63,12 @@ class _PantallaRolState extends State<PantallaRol> {
               Center(
                 child: Image.asset(
                   'assets/images/logo_circular_canvas.jpg',
-                  width: 150,
-                  height: 150,
+                  width: 124,
+                  height: 124,
                   fit: BoxFit.contain,
                 ),
               ),
-              const SizedBox(height: 20),
+              const SizedBox(height: 14),
               Row(
                 children: [
                   Container(
@@ -244,12 +244,15 @@ class _TarjetaRol extends StatelessWidget {
       child: AnimatedContainer(
         duration: const Duration(milliseconds: 150),
         decoration: BoxDecoration(
-          color: seleccionado ? AppTema.mentaClaro : Colors.white,
+          color: seleccionado ? AppTema.naranjaClaro : Colors.white,
           border: Border.all(
-            color: seleccionado ? AppTema.menta : AppTema.borde,
+            color: seleccionado ? AppTema.ambar : AppTema.borde,
             width: seleccionado ? 2 : 1,
           ),
-          borderRadius: BorderRadius.circular(12),
+          borderRadius: BorderRadius.circular(16),
+          boxShadow: seleccionado
+              ? [BoxShadow(color: AppTema.ambar.withOpacity(0.12), blurRadius: 12, offset: const Offset(0, 3))]
+              : const [],
         ),
         padding: const EdgeInsets.all(12),
         child: Column(
@@ -283,7 +286,7 @@ class _TarjetaRol extends StatelessWidget {
               style: TextStyle(
                 fontSize: 12,
                 fontWeight: FontWeight.w600,
-                color: seleccionado ? AppTema.verde : AppTema.textoOscuro,
+                color: seleccionado ? AppTema.verdeOscuro : AppTema.textoOscuro,
               ),
             ),
             const SizedBox(height: 2),
