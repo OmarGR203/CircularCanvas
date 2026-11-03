@@ -97,18 +97,6 @@ class AdjuntoService {
         .toString()
         .replaceAll(RegExp(r'[\\/:*?"<>|]'), '_');
 
-    final extension = archivo['extension'].toString().toLowerCase();
-
-    final mime = switch (extension) {
-      'pdf' => 'application/pdf',
-      'png' => 'image/png',
-      'jpg' || 'jpeg' => 'image/jpeg',
-      'txt' => 'text/plain',
-      'csv' => 'text/csv',
-      'json' => 'application/json',
-      _ => 'application/octet-stream',
-    };
-
     await FilePicker.platform.saveFile(
       fileName: nombre,
       bytes: bytes,
