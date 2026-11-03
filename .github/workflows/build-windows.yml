@@ -1,0 +1,94 @@
+name: Build CircularCanvas for Windows
+
+on:
+  workflow_dispatch:
+  push:
+    branches:
+      - main
+
+jobs:
+  build-windows:
+    runs-on: windows-2022
+
+    steps:
+      - name: Descargar el repositorio
+        uses: actions/checkout@v4
+
+      - name: Instalar Flutter
+        uses: subosito/flutter-action@v2
+        with:
+          channel: stable
+          flutter-version: '3.41.5'
+          cache: true
+
+      - name: Obtener dependencias
+        run: flutter pub get
+
+      - name: Analizar proyecto
+        run: flutter analyze
+
+      - name: Compilar para Windows
+        run: flutter build windows --release
+
+      - name: Comprobar archivos de compilacion
+        shell: pwsh
+        run: |
+          $release = "build/windows/x64/runner/Release"
+          if (!(Test-Path "$release/circular_canvas.exe")) {
+            throw "No se encontro circular_canvas.exe en $release"
+          }
+          Get-ChildItem $release
+
+      - name: Crear paquete portable ZIP
+        shell: pwsh
+        run: |
+          Compress-Archive -Path "build/windows/x64/runner/Release/*" -DestinationPath "CircularCanvas-Windows-Portable.zip" -Force
+
+      - name: Instalar Inno Setup
+        run: choco install innosetup --yes --no-progress
+
+      - name: Crear instalador
+        shell: pwsh
+        run: |
+          @'
+          [Setup]
+          AppId={{A9D6C34E-2D7A-4C6A-9B7A-5F3C8E2A1041}
+          AppName=CircularCanvas
+          AppVersion=1.0.0
+          AppPublisher=CircularCanvas
+          DefaultDirName={autopf}\CircularCanvas
+          DefaultGroupName=CircularCanvas
+          OutputDir=.
+          OutputBaseFilename=CircularCanvas_Setup
+          ArchitecturesInstallIn64BitMode=x64
+          PrivilegesRequired=admin
+          UninstallDisplayIcon={app}\circular_canvas.exe
+          Compression=lzma2
+          SolidCompression=yes
+
+          [Tasks]
+          Name: "desktopicon"; Description: "Crear un acceso directo en el escritorio"; GroupDescription: "Accesos directos:"
+
+          [Files]
+          Source: "build\windows\x64\runner\Release\*"; DestDir: "{app}"; Flags: ignoreversion recursesubdirs createallsubdirs
+
+          [Icons]
+          Name: "{group}\CircularCanvas"; Filename: "{app}\circular_canvas.exe"
+          Name: "{autodesktop}\CircularCanvas"; Filename: "{app}\circular_canvas.exe"; Tasks: desktopicon
+
+          [Run]
+          Filename: "{app}\circular_canvas.exe"; Description: "Iniciar CircularCanvas"; Flags: postinstall nowait skipifsilent
+          '@ | Set-Content -Path "CircularCanvas.iss" -Encoding ASCII
+          & "C:\Program Files (x86)\Inno Setup 6\ISCC.exe" "CircularCanvas.iss"
+          if (!(Test-Path "CircularCanvas_Setup.exe")) {
+            throw "No se genero CircularCanvas_Setup.exe"
+          }
+
+      - name: Publicar instalador y version portable
+        uses: actions/upload-artifact@v4
+        with:
+          name: CircularCanvas-Windows
+          path: |
+            CircularCanvas_Setup.exe
+            CircularCanvas-Windows-Portable.zip
+          if-no-files-found: error
