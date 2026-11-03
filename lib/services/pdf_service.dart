@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter/services.dart';
 import 'package:pdf/pdf.dart';
@@ -107,10 +109,22 @@ class PdfService {
       fileName: 'CircularCanvas_${nombreSeguro}_$fechaTexto.pdf',
       type: FileType.custom,
       allowedExtensions: ['pdf'],
-      bytes: bytes,
     );
 
-    return ruta != null;
+    if (ruta == null || ruta.trim().isEmpty) {
+      return false;
+    }
+
+    // En Windows, saveFile devuelve la ruta seleccionada; los bytes
+    // deben escribirse explícitamente en ese destino.
+    final archivo = File(ruta);
+    await archivo.writeAsBytes(bytes, flush: true);
+
+    if (!await archivo.exists() || await archivo.length() == 0) {
+      throw Exception('El archivo PDF no se creó correctamente.');
+    }
+
+    return true;
   }
 
   static String _rutaImagenRol(RolEmprendedor rol) {
