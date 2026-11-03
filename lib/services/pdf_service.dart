@@ -11,7 +11,6 @@ class PdfService {
   static const PdfColor _menta = PdfColor.fromInt(0xFF58A66A);
   static const PdfColor _mentaClaro = PdfColor.fromInt(0xFFEAF5EC);
   static const PdfColor _naranja = PdfColor.fromInt(0xFFF29A38);
-  static const PdfColor _naranjaClaro = PdfColor.fromInt(0xFFFFF1E2);
   static const PdfColor _fondo = PdfColor.fromInt(0xFFF6F8F5);
   static const PdfColor _texto = PdfColor.fromInt(0xFF24342B);
   static const PdfColor _textoMedio = PdfColor.fromInt(0xFF5C6D61);
@@ -520,10 +519,10 @@ class PdfService {
       );
     } else {
       for (final item in elementos) {
-        contenido.add(_viñeta(item));
+        contenido.add(_vineta(item));
       }
       for (final item in observaciones) {
-        contenido.add(_viñeta(item, observacion: true));
+        contenido.add(_vineta(item, observacion: true));
       }
     }
 
@@ -559,7 +558,7 @@ class PdfService {
     );
   }
 
-  static pw.Widget _viñeta(String texto, {bool observacion = false}) {
+  static pw.Widget _vineta(String texto, {bool observacion = false}) {
     return pw.Padding(
       padding: const pw.EdgeInsets.only(bottom: 3),
       child: pw.Row(
