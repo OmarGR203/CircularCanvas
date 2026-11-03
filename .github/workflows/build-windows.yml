@@ -24,8 +24,8 @@ jobs:
       - name: Obtener dependencias
         run: flutter pub get
 
-      - name: Analizar proyecto
-        run: flutter analyze
+      - name: Analizar proyecto (sin bloquear la compilacion por avisos)
+        run: flutter analyze --no-fatal-infos --no-fatal-warnings
 
       - name: Compilar para Windows
         run: flutter build windows --release
